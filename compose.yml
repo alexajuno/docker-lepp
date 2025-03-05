@@ -17,13 +17,22 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata # specify the location of the database body to avoid postgresql to create data in the default location where it already exists
 
   php-fpm:
-    image: php:8.2.7-fpm-alpine
+    build:
+      context: .
+      dockerfile: php.dockerfile
     container_name: phpfpm
     restart: unless-stopped
     ports:
       - 9000:9000
     volumes:
       - ${WWW_DOCUMENT_ROOT}/:/app
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=${POSTGRES_DB}
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=
 
   nginx:
     image: bitnami/nginx:1.22.1
