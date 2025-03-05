@@ -29,12 +29,13 @@ services:
     image: bitnami/nginx:1.22.1
     container_name: nginx
     restart: always
+    user: root
     ports:
       - 8080:8080
     volumes:
       - ./nginx/logs:/opt/bitnami/nginx/logs/
-      - ./nginx/server-blocks/default.conf:/opt/bitnami/nginx/conf/server_blocks/default.conf:ro
+      - ./nginx/server-blocks:/opt/bitnami/nginx/conf/server_blocks/:ro
       - ${WWW_DOCUMENT_ROOT}/:/app
     depends_on:
       - postgres
-      - php-fpm
+      - php-fpm 
